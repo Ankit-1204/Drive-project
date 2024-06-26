@@ -3,15 +3,20 @@ import { RiFolderAddFill } from "react-icons/ri";
 import { RiFileAddFill } from "react-icons/ri";
 
 const Folder=()=>{
-    <div>
-        <RiFolderAddFill className=" text-white hover:text-green-400"/>
-    </div>
+    return(
+       <div>
+        <RiFolderAddFill className=" text-black hover:text-green-400 w-10 h-10"/>
+    </div> 
+    )
 }
 
 const File=()=>{
-    <div>
-        <RiFileAddFill className="text-white hover:text-blue-400"/>
+    return(
+        <div>
+        <RiFileAddFill className="text-black hover:text-blue-400 w-10 h-10"/>
     </div>
+    )
+    
 }
 
 export {File,Folder}
