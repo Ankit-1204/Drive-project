@@ -15,7 +15,7 @@ function Nav(){
     const [open,isOpen]=useState(true);
     return(
         <>
-        <nav className=" w-1/5 flex justify-end text-white text-lg ">
+        <nav className=" w-1/5 flex justify-end text-white text-xl ">
             
             <div className="md:flex w-full hidden justify-around">
                 <Navlink margin="mt-6"/>
@@ -26,7 +26,7 @@ function Nav(){
                 <button onClick={()=>{isOpen(!open)}}> {open ?<IoMdArrowDropdownCircle className="w-10 h-10"/> : <IoCloseSharp className="w-10 h-10"/> } </button>
             </div> 
         </nav>
-        {!open && <div className="flex flex-col items-center basis-full md:hidden text-white text-lg my-4"><Navlink margin="mb-2"/></div>}
+        {!open && <div className="flex flex-col items-center basis-full md:hidden text-white text-xl my-4"><Navlink margin="mb-2"/></div>}
         </>
     )
 }

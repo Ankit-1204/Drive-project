@@ -1,12 +1,38 @@
-import React from "react";
-import { Form } from "react-router-dom";
+import React, { useState } from "react";
+import { database } from "../../firebase.jsx";
+import {  addDoc, collection } from "firebase/firestore"; 
 
-const FileModal=()=>{
 
+const FileModal=(props)=>{
+    const [fileName,setFileName]=useState("");
+    const handleSubmit=(e)=>{
+        e.preventDefault();
+    }
+    const createFolder= async ()=>{
+        props.click();
+        const doc=await addDoc(database.files,{
+            name:fileName
+        })
+        setFileName("");
+        
+    }
+    const handleInputChange = (e) => {
+        setFileName(e.target.value);
+      };
     return(
-        <div className=" flex fixed inset-x-2/4 inset-y-2/4 justify-center items-center ">
-            <div  className="bg-gray-500 bg-opacity-20 w-1/3 h-40">
-                <h1>Hello</h1>
+        <div className=" flex fixed inset-0 justify-center items-center backdrop-blur-sm z-50">
+            <div  className="flex bg-gray-100 w-full max-w-lg mx-4 p-10 md:mx-auto md:w-3/5 md:auto justify-center rounded-md">
+                <div className="flex flex-col w-full space-y-8">
+                    <div className=" space-y-3">
+                        <label className=" text-sm font-medium"> File Name</label>
+                        <input type="text"  value={fileName} onChange={handleInputChange} className=" rounded-md w-full p-3 ring-blue-300 ring-2" placeholder="Write your File Name..."/>
+                    </div>
+                    <div className="flex justify-around">
+                        <button type="submit" onClick={createFolder} className=" rounded-sm text-white bg-blue-500 py-2.5 px-5 text-center">Create</button>
+                        <button onClick={props.click} className=" rounded-sm text-white bg-blue-500 py-2.5 px-5 text-center">Close</button>
+                    </div>
+                    
+                </div>
             </div>
             
         </div>
