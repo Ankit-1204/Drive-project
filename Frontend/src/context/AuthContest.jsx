@@ -3,28 +3,35 @@ import React from "react";
 import { auth } from "../firebase";
 import {  createUserWithEmailAndPassword ,onAuthStateChanged} from "firebase/auth";
 
+
 export const userContext=createContext({});
 export const useAuth=()=>{
     return useContext(userContext);
 }
-export const userContextProvider=({children})=> {
-    const [user,setUser]=useState({});
-    const login=(email,password)=>{
+export const UserContextProvider=({children})=> {
+    const [loading,setLoading]=useState(true);
+    const [curruser,setUser]=useState({});
+    const signup=(email,password)=>{
         createUserWithEmailAndPassword(auth,email,password).then((UserCredential)=>{
-            const user=UserCredential.user;
+            return UserCredential.user;
         })
+    }
         useEffect(()=>{
-        const subscribe= onAuthStateChanged(auth, (user)=>{
-            setUser(user)
+        const subscribe= onAuthStateChanged(auth, (cuser)=>{
+            setUser(cuser)
+            setLoading(false);
         })
-        return ()=>subscribe();
+        return subscribe;
         },[])
         
+    
+    const value={
+        curruser:curruser,
+        signup:signup
     }
-
     return(
-        <userContext.Provider user={user} setUser={setUser}>
-            {children}
+        <userContext.Provider value={value} >
+            {!loading && children}
         </userContext.Provider>
     )
 }

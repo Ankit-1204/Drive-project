@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "./Header";
-import Front from "./Main";
+import Front from "./Front";
 function Home(){
     return(
        
