@@ -1,5 +1,6 @@
 import {initializeApp} from "firebase/app"
 import {getStorage} from "firebase/storage"
+import {getAuth } from "firebase/auth"
 import { getFirestore ,collection}  from "firebase/firestore";
 
 console.log(import.meta.env.VITE_REACT_APP_PROJECT_ID)
@@ -17,5 +18,5 @@ export const database= {
     folder: collection(firestore,'folder'),
     files: collection(firestore,'files')
 }
-
+export const auth=getAuth(app);
 export default app;
