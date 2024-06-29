@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { IoMdArrowDropdownCircle } from "react-icons/io";
 import { IoCloseSharp } from "react-icons/io5";
+import { FaUserCircle } from "react-icons/fa";
+import { IoLogOutOutline } from "react-icons/io5";
 import { useAuth } from "../../context/AuthContest";
 function Navlink(props){
     const {signout}=useAuth();
@@ -15,9 +17,9 @@ function Navlink(props){
     }
     return(
         <>
-            <Link to="/profile" > Profile </Link>
-            <Link to="/about" > About </Link>
-            <button onClick={handleLogOut}>Logout</button>
+            <Link to="/profile" className="flex items-center" ><FaUserCircle className="w-10 h-10 mr-2"/> Profile </Link>
+            {/* <Link to="/about" > About </Link> */}
+            <button onClick={handleLogOut} className="flex items-center"><IoLogOutOutline className="w-10 h-10 mr-2"/>Logout</button>
         </>
     )
 }

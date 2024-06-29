@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { database } from "../../firebase.jsx";
 import {  addDoc, collection } from "firebase/firestore"; 
-
+import { useAuth } from "../../context/AuthContest.jsx";
 
 const FileModal=(props)=>{
+    const {curruser}=useAuth();
     const [fileName,setFileName]=useState("");
     const handleSubmit=(e)=>{
         e.preventDefault();
@@ -11,7 +12,9 @@ const FileModal=(props)=>{
     const createFolder= async ()=>{
         props.click();
         const doc=await addDoc(database.files,{
-            name:fileName
+            name:fileName,
+            userId:curruser.uid,
+            createAtTime:database.time
         })
         setFileName("");
         

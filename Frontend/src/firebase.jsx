@@ -1,7 +1,7 @@
 import {initializeApp} from "firebase/app"
 import {getStorage} from "firebase/storage"
 import {getAuth } from "firebase/auth"
-import { getFirestore ,collection}  from "firebase/firestore";
+import { getFirestore ,collection, serverTimestamp}  from "firebase/firestore";
 
 console.log(import.meta.env.VITE_REACT_APP_PROJECT_ID)
 const app= initializeApp({
@@ -16,7 +16,8 @@ const firestore= getFirestore(app);
 
 export const database= {
     folder: collection(firestore,'folder'),
-    files: collection(firestore,'files')
+    files: collection(firestore,'files'),
+    time:serverTimestamp()
 }
 export const auth=getAuth(app);
 export default app;
