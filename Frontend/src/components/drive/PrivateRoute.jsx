@@ -2,10 +2,16 @@ import { Navigate, Route, redirect } from "react-router-dom";
 import React from "react";
 import { useAuth } from "../../context/AuthContest";
 import Home from "./Home";
-const PrivateRoute=({component:Component ,...rest})=>{
+export const PrivateRoute=({children})=>{
     const {curruser}=useAuth();
     return(
-        <Route {...rest} element={curruser ?<Component />: <Navigate to={"/login"} />} />
+        curruser ?children: <Navigate to="/signup" />
     )
 }
-export default PrivateRoute;
+
+export const PublicRoute=({children})=>{
+    const {curruser}=useAuth();
+    return(
+        curruser===null?children:<Navigate to="/" />
+    )
+}

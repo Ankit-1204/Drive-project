@@ -4,7 +4,8 @@ import Signup from './components/drive/Signup'
 import { UserContextProvider } from './context/AuthContest.jsx'
 import './App.css'
 import { BrowserRouter as Router,Routes,Route } from 'react-router-dom'
-import PrivateRoute from './components/drive/PrivateRoute.jsx'
+import {PrivateRoute, PublicRoute} from './components/drive/PrivateRoute.jsx'
+import Login from './components/drive/Login.jsx'
 function App() {
   const [count, setCount] = useState(0)
 
@@ -13,8 +14,9 @@ function App() {
     <UserContextProvider>
       <Router>
       <Routes>
-        <Route exact path='/' element={PrivateRoute} />
-        <Route path='signup' element={<Signup/>}/>
+        <Route exact path='/' element={<PrivateRoute><Home/></PrivateRoute>}/>
+        <Route path='/signup' element={<PublicRoute><Signup/></PublicRoute>}/>
+        <Route path='/login' element={<PublicRoute><Login/></PublicRoute>}/>
       </Routes>
     </Router>
     </UserContextProvider>
