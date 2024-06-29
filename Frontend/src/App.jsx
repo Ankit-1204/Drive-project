@@ -7,7 +7,7 @@ import { BrowserRouter as Router,Routes,Route } from 'react-router-dom'
 import {PrivateRoute, PublicRoute} from './components/drive/PrivateRoute.jsx'
 import Login from './components/drive/Login.jsx'
 function App() {
-  const [count, setCount] = useState(0)
+  
 
   return (
     <>
@@ -15,8 +15,8 @@ function App() {
       <Router>
       <Routes>
         <Route exact path='/' element={<PrivateRoute><Home/></PrivateRoute>}/>
-        <Route path='/signup' element={<PublicRoute><Signup/></PublicRoute>}/>
         <Route path='/login' element={<PublicRoute><Login/></PublicRoute>}/>
+        <Route path='/signup' element={<PublicRoute><Signup/></PublicRoute>}/>
       </Routes>
     </Router>
     </UserContextProvider>

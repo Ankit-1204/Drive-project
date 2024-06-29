@@ -5,7 +5,7 @@ import Home from "./Home";
 export const PrivateRoute=({children})=>{
     const {curruser}=useAuth();
     return(
-        curruser ?children: <Navigate to="/signup" />
+        curruser ?children: <Navigate to="/login" />
     )
 }
 

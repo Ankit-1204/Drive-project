@@ -2,11 +2,22 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { IoMdArrowDropdownCircle } from "react-icons/io";
 import { IoCloseSharp } from "react-icons/io5";
+import { useAuth } from "../../context/AuthContest";
 function Navlink(props){
+    const {signout}=useAuth();
+    const handleLogOut=async()=>{
+        try {
+           await signout(); 
+        } catch (error) {
+            console.log(error)
+        }
+        
+    }
     return(
         <>
-            <Link to="/profile" className={props.margin}> Profile </Link>
-            <Link to="/about" className={props.margin}> About </Link>
+            <Link to="/profile" > Profile </Link>
+            <Link to="/about" > About </Link>
+            <button onClick={handleLogOut}>Logout</button>
         </>
     )
 }
@@ -15,9 +26,9 @@ function Nav(){
     const [open,isOpen]=useState(true);
     return(
         <>
-        <nav className=" w-1/5 flex justify-end text-white text-xl ">
+        <nav className=" w-1/3 flex justify-end text-white text-xl ">
             
-            <div className="md:flex w-full hidden justify-around">
+            <div className="md:flex w-full hidden justify-around items-center">
                 <Navlink margin="mt-6"/>
             </div>
             

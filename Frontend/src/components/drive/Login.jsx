@@ -5,14 +5,11 @@ import { useAuth } from "../../context/AuthContest";
 const Login= ()=>{
     const [email,setEmail]=useState("");
     const [pass,setPass]=useState("");
-    const {signup,curruser}=useAuth();
-    const handleSignUp= async(e)=>{
+    const {login}=useAuth();
+    const handleLogin= async(e)=>{
         e.preventDefault();
-        if(pass!=conpass){
-            return console.log("Different passwords entered")
-        }
         try{
-           await signup(email,pass);
+           await login(email,pass);
         }catch(e){
             console.log(e);
         }
@@ -35,7 +32,7 @@ const Login= ()=>{
                 </div>
                 
                 <div className="flex justify-center mt-6">
-                    <button onClick={handleSignUp} className=" w-2/4 py-3 bg-blue-500 text-white rounded-lg text-lg">Submit</button>
+                    <button onClick={handleLogin} className=" w-2/4 py-3 bg-blue-500 text-white rounded-lg text-lg">Submit</button>
                 </div>
 
                 </form>
