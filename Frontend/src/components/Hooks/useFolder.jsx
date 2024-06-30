@@ -1,13 +1,15 @@
 import React, { useEffect, useReducer } from "react";
 import { database } from "../../firebase.jsx";
-import { getDocs, query,where } from "firebase/firestore";
+import { getDocs, query,where,getDoc,doc } from "firebase/firestore";
 import { useAuth } from "../../context/AuthContest";
-const tp={
-    update:"UPDATE",
-    select:"SELECT",
-    child:"CREATE_CHILD"
-}
+
 export const useFolder=(folderId=null,folder=null)=>{
+    const tp={
+        update:"UPDATE",
+        select:"SELECT",
+        child:"CREATE_CHILD"
+    }
+
     const {curruser}=useAuth();
     const reducer=(state, {type,payload})=>{
         switch (type) {
@@ -35,14 +37,22 @@ export const useFolder=(folderId=null,folder=null)=>{
     useEffect(()=>{
         if(folderId==null){
             dispatch({type:tp.update,payload:{folder:ROOT}})
+        }else{
+            const fetchFolder=async()=>{
+                doc
+                const q=query(database.folders,where('id','==',folderId),where('userId','==',curruser.uid))
+                const qsnap=await getDoc(q);  
+            }
+            fetchFolder()
         }  
     },[folderId])
 
     useEffect(()=>{
         const fetchChild=async()=>{
             const q=query(database.folders,where('parID','==',folderId),where('userId','==',curruser.uid))
-                    const qsnap=await getDocs(q);
-                    dispatch({type:tp.child,payload:{childFolders:qsnap.docs.map(doc => ({ ...doc.data() }))}})
+                    const qsnap=await getDoc(q);
+                    const folder={name:qsnap.data().name,parent:qsnap.data().parID,path:[]};
+                    dispatch({type:tp.update,payload:{folder:folder}})
         }
         fetchChild();
     },[folderId,curruser])
