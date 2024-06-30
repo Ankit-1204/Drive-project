@@ -15,7 +15,7 @@ const app= initializeApp({
 const firestore= getFirestore(app);
 
 export const database= {
-    folder: collection(firestore,'folder'),
+    folders: collection(firestore,'folder'),
     files: collection(firestore,'files'),
     time:serverTimestamp()
 }
