@@ -9,9 +9,7 @@ const FileModal=(props)=>{
 
     const {curruser}=useAuth();
     const [fileName,setFileName]=useState("");
-    const handleSubmit=(e)=>{
-        e.preventDefault();
-    }
+    
     const createFolder= async ()=>{
         props.click();
         const doc=await addDoc(database.folders,{

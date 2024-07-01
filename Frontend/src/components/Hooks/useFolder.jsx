@@ -2,6 +2,7 @@ import React, { useEffect, useReducer } from "react";
 import { database } from "../../firebase.jsx";
 import { getDocs, query,where,getDoc,doc,orderBy } from "firebase/firestore";
 import { useAuth } from "../../context/AuthContest";
+import { onSnapshot } from "firebase/firestore";
 
 export const useFolder=(folderId=null,folder=null)=>{
     const tp={
@@ -47,13 +48,10 @@ export const useFolder=(folderId=null,folder=null)=>{
     },[folderId])
 
     useEffect(()=>{
-        const fetchChild=async()=>{
-            const q=query(database.folders,where('parID','==',folderId),where('userId','==',curruser.uid),orderBy("createAtTime"))
-                    const qsnap=await getDocs(q);
-                    const folder=qsnap.docs.map(docs=>({key:docs.id,...docs.data()}))
-                    dispatch({type:tp.child,payload:{childFolders:folder}})
-        }
-        fetchChild();
+        
+        const q=query(database.folders,where('parID','==',folderId),where('userId','==',curruser.uid),orderBy("createAtTime"))
+        const unsubscribe=onSnapshot(q,(snapshot)=>{dispatch({type:tp.child,payload:{childFolders:snapshot.docs.map(docs=>({key:docs.id,...docs.data()}))}})})
+        return ()=>unsubscribe();
     },[folderId,curruser])
     
     return state;
