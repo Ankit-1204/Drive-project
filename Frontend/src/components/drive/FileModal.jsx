@@ -18,7 +18,7 @@ const FileModal=(props)=>{
             name:fileName,
             userId:curruser.uid,
             createAtTime:database.time,
-            parID:folderId
+            parID:props.folderId
         })
         setFileName("");
         

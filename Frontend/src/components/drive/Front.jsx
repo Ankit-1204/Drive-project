@@ -3,17 +3,18 @@ import { Folder, File } from "./Buttons";
 import FileModal from "./FileModal";
 import { useFolder } from "../Hooks/useFolder.jsx";
 import { FolderBox } from "./FoldarBox.jsx";
-
+import { Link } from "react-router-dom";
 const Front=()=>{
     const [loading,setLoading]=useState(true);
-    const {folderId,folder,childFolders}=useFolder("NNs6johKz8vSSVQsNskh");
+    const [currFoldId,setCurrFoldId]=useState(null);
+    const {folderId,folder,childFolders}=useFolder(currFoldId);
     console.log(folder);
     console.log(childFolders);
     const [fileModal,setFileModal]=useState(false);
     
     const handleFoldClick=(foldId)=>{
-        console.log(foldId)
-        useFolder(foldId,null);
+        setCurrFoldId(foldId);
+        setLoading(true);
         
     }
 
@@ -40,13 +41,13 @@ const Front=()=>{
         </div>
     </div>
         <div className="flex w-full flex-col md:flex-row mx-auto px-9 py-8">
-            {childFolders.map((folder)=>{ return <FolderBox key={folder.key} value={folder} handleClick={handleFoldClick}/>})}
+            {childFolders.map((folder)=>(<Link className=" bg-gray-600 p-3 m-2 rounded-md md:m-8" key={folder.key} to={'/folder/'+(folder.key)} >{folder.name}</Link>))}
 
         </div>
 
     </div>
     }
-        {fileModal && <FileModal click={handleFileClick} />}
+        {fileModal && <FileModal folderId={folderId} click={handleFileIconClick} />}
     </div>
     )
     
