@@ -3,7 +3,7 @@ import { database } from "../../firebase.jsx";
 import { getDocs, query,where,getDoc,doc,orderBy } from "firebase/firestore";
 import { useAuth } from "../../context/AuthContest";
 import { onSnapshot } from "firebase/firestore";
-
+import { documentId } from "firebase/firestore";
 export const useFolder=(folderId=null,folder=null)=>{
     const tp={
         update:"UPDATE",
@@ -36,14 +36,14 @@ export const useFolder=(folderId=null,folder=null)=>{
         dispatch({type:tp.select,payload:{folderId:folderId,folder:folder}})
     },[folderId,folder])
     useEffect(()=>{
-        if(folderId==null){
+        if(folderId===null){
             dispatch({type:tp.update,payload:{folder:ROOT}})
-        }else{
-            const fetchFolder=async()=>{
-                const q=query(database.folders,where('id','==',folderId),where('userId','==',curruser.uid))
-                const qsnap=await getDoc(q);  
-            }
-            return fetchFolder()
+        }
+        else{
+            
+            const q=doc(database.folders,folderId);
+            const unsubscribe= onSnapshot(q,(snapshot)=>{dispatch({type:tp.update,payload:{folder:{name:snapshot.data().name,parent:snapshot.data().parID,path:[]}}})}) 
+            return ()=>unsubscribe();
         }  
     },[folderId])
 

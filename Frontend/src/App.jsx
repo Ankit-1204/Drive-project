@@ -15,6 +15,7 @@ function App() {
       <Router>
       <Routes>
         <Route exact path='/' element={<PrivateRoute><Home/></PrivateRoute>}/>
+        <Route exact path='/folder/:Id' element={<PrivateRoute><Home/></PrivateRoute>} />
         <Route path='/login' element={<PublicRoute><Login/></PublicRoute>}/>
         <Route path='/signup' element={<PublicRoute><Signup/></PublicRoute>}/>
       </Routes>
