@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Folder, File } from "./Buttons";
 import FileModal from "./FileModal";
 import { useFolder } from "../Hooks/useFolder.jsx";
-import { FolderBox } from "./FoldarBox.jsx";
 import { Link, useParams } from "react-router-dom";
+import FolderPath from "./FolderPath.jsx";
 
 const Front=()=>{
     let {Id}=useParams();
@@ -19,12 +19,6 @@ const Front=()=>{
     console.log(childFolders);
     const [fileModal,setFileModal]=useState(false);
     
-    // const handleFoldClick=(foldId)=>{
-    //     setCurrFoldId(foldId);
-    //     setLoading(true);
-        
-    // }
-
     const handleFileIconClick=()=>{
         setFileModal(!fileModal);
     }
@@ -36,7 +30,7 @@ const Front=()=>{
     <div>
        <div className="w-full mx-auto px-9 py-8 bg-gray-200">
         <div className="flex flex-wrap justify-between">
-            {folder ? <span className="text-2xl font-bold font-sans">{folder.name}</span> :<span className="text-2xl font-bold font-sans">Loading</span>}
+            {folder ? <FolderPath folder={folder} /> :<span className="text-2xl font-bold font-sans">Loading</span>}
             <div className=" w-1/6 flex flex-row justify-between md:pr-8">
                 <button className=" hover:text-green-500 rounded"><Folder /></button>
                 <button onClick={handleFileIconClick} className=" hover:text-blue-400 rounded"><File /></button>
@@ -44,14 +38,14 @@ const Front=()=>{
         </div>
     </div>
     
-        {childFolders && <div className="flex w-full flex-col md:flex-row mx-auto px-9 py-8">
+        {folder && childFolders && <div className="flex w-full flex-col md:flex-row mx-auto px-9 py-8">
             {childFolders.map((folder)=>(<Link className=" bg-gray-600 p-3 m-2 rounded-md md:m-8" key={folder.key} to={'/folder/'+(folder.key)} >{folder.name}</Link>))}
 
         </div>}
     
     </div>
      
-        {fileModal && <FileModal folderId={folderId} click={handleFileIconClick} />}
+        {fileModal && folder && <FileModal folderId={folderId} click={handleFileIconClick} folder={folder} />}
     
     </div>
     )

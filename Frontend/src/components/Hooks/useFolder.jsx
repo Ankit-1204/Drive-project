@@ -42,7 +42,7 @@ export const useFolder=(folderId=null,folder=null)=>{
         else{
             
             const q=doc(database.folders,folderId);
-            const unsubscribe= onSnapshot(q,(snapshot)=>{dispatch({type:tp.update,payload:{folder:{name:snapshot.data().name,parent:snapshot.data().parID,path:[]}}})}) 
+            const unsubscribe= onSnapshot(q,(snapshot)=>{dispatch({type:tp.update,payload:{folder:snapshot.data()}})}) 
             return ()=>unsubscribe();
         }  
     },[folderId])

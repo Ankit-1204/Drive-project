@@ -12,11 +12,16 @@ const FileModal=(props)=>{
     
     const createFolder= async ()=>{
         props.click();
+        const path=[...props.folder.path];
+        if(props.folder.name!=="root"){
+            path.push({name:props.folder.name,id:props.folderId})
+        }
         const doc=await addDoc(database.folders,{
             name:fileName,
             userId:curruser.uid,
             createAtTime:database.time,
-            parID:props.folderId
+            parID:props.folderId,
+            path:path
         })
         setFileName("");
         
