@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Folder, File } from "./Buttons";
-import FileModal from "./FileModal";
+import FolderModal from "./FolderModal.jsx";
+import FileModal from "./FileModal.jsx";
 import { useFolder } from "../Hooks/useFolder.jsx";
 import { Link, useParams } from "react-router-dom";
 import FolderPath from "./FolderPath.jsx";
@@ -18,11 +19,14 @@ const Front=()=>{
     console.log(folder);
     console.log(childFolders);
     const [fileModal,setFileModal]=useState(false);
-    
+    const [folderModal,setFolderModal]=useState(false);
+
+    const handleFolderIconClick=()=>{
+        setFolderModal(!folderModal);
+    }
     const handleFileIconClick=()=>{
         setFileModal(!fileModal);
     }
-    
     return(
         
     <div >
@@ -32,8 +36,8 @@ const Front=()=>{
         <div className="flex flex-wrap justify-between">
             {folder ? <FolderPath folder={folder} /> :<span className="text-2xl font-bold font-sans">Loading</span>}
             <div className=" w-1/6 flex flex-row justify-between md:pr-8">
-                <button className=" hover:text-green-500 rounded"><Folder /></button>
-                <button onClick={handleFileIconClick} className=" hover:text-blue-400 rounded"><File /></button>
+                <button onClick={handleFileIconClick} className=" hover:text-green-500 rounded"><File /></button>
+                <button onClick={handleFolderIconClick} className=" hover:text-blue-400 rounded"><Folder /></button>
             </div>
         </div>
     </div>
@@ -45,6 +49,7 @@ const Front=()=>{
     
     </div>
      
+        {folderModal && folder && <FolderModal folderId={folderId} click={handleFolderIconClick} folder={folder} />}
         {fileModal && folder && <FileModal folderId={folderId} click={handleFileIconClick} folder={folder} />}
     
     </div>

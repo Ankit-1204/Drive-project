@@ -19,5 +19,6 @@ export const database= {
     files: collection(firestore,'files'),
     time:serverTimestamp()
 }
+export const storage=getStorage(app);
 export const auth=getAuth(app);
 export default app;

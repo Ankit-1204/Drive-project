@@ -1,44 +1,42 @@
 import React, { useState } from "react";
-import { database } from "../../firebase.jsx";
-import {  addDoc, collection } from "firebase/firestore"; 
-import { useAuth } from "../../context/AuthContest.jsx";
-
+import { useAuth } from "../../context/AuthContest";
+import { storage } from "../../firebase";
+import { ref ,uploadBytes,uploadBytesResumable} from "firebase/storage";
 
 
 const FileModal=(props)=>{
 
     const {curruser}=useAuth();
-    const [fileName,setFileName]=useState("");
-    
-    const createFolder= async ()=>{
-        props.click();
-        const path=[...props.folder.path];
-        if(props.folder.name!=="root"){
-            path.push({name:props.folder.name,id:props.folderId})
-        }
-        const doc=await addDoc(database.folders,{
-            name:fileName,
-            userId:curruser.uid,
-            createAtTime:database.time,
-            parID:props.folderId,
-            path:path
-        })
-        setFileName("");
-        
+    const [file,setFile]=useState(null);
+
+    const handleInputChange=(e)=>{
+        setFile(e.target.files[0])
     }
-    const handleInputChange = (e) => {
-        setFileName(e.target.value);
-      };
+    const createFile=()=>{
+        props.onClick();
+        let parentPath;
+        if(props.folder.name!="root"){
+            parentPath=props.folder.path.map((item)=>item.name).join('/');
+            console.log(parentPath);
+        }else{
+            parentPath=file.name;
+        }
+        const filePath= props.folder.name==="root"?parentPath:parentPath+'/'+props.folder.name+'/'+file.name;
+        const fileRef=ref(storage,"/files/"+filePath);
+        uploadBytesResumable(fileRef,file).then((snap)=>{console.log("file uploaded")}).catch((e)=>{console.log(e)});
+
+        setFile(null);
+    }
     return(
         <div className=" flex fixed inset-0 justify-center items-center backdrop-blur-sm z-50">
             <div  className="flex bg-gray-100 w-full max-w-lg mx-4 p-10 md:mx-auto md:w-3/5 md:auto justify-center rounded-md">
                 <div className="flex flex-col w-full space-y-8">
                     <div className=" space-y-3">
                         <label className=" text-sm font-medium"> File Name</label>
-                        <input type="text"  value={fileName} onChange={handleInputChange} className=" rounded-md w-full p-3 ring-blue-300 ring-2" placeholder="Write your File Name..."/>
+                        <input type="file"  onChange={handleInputChange} className=" rounded-md w-full p-3 ring-blue-300 ring-2" placeholder="Write your File Name..."/>
                     </div>
                     <div className="flex justify-around">
-                        <button type="submit" onClick={createFolder} className=" rounded-sm text-white bg-blue-500 py-2.5 px-5 text-center">Create</button>
+                        <button type="submit" onClick={createFile} className=" rounded-sm text-white bg-blue-500 py-2.5 px-5 text-center">Create</button>
                         <button onClick={props.click} className=" rounded-sm text-white bg-blue-500 py-2.5 px-5 text-center">Close</button>
                     </div>
                     
