@@ -8,7 +8,8 @@ export const useFolder=(folderId=null,folder=null)=>{
     const tp={
         update:"UPDATE",
         select:"SELECT",
-        child:"CREATE_CHILD"
+        child_folder:"CREATE_CHILD_FOLDER",
+        child_file:"CREATE_CHILD_FILE"
     }
 
     const {curruser}=useAuth();
@@ -18,8 +19,10 @@ export const useFolder=(folderId=null,folder=null)=>{
                 return {...state,folder:payload.folder, folderId:payload.folderId};
             case tp.update:
                 return {...state,folder:payload.folder};
-            case tp.child:
+            case tp.child_folder:
                 return {...state,childFolders:payload.childFolders}
+            case tp.child_file:
+                return {...state,childFiles:payload.childFiles}
             default:
                 console.log("Invalid option");
                 return state;
@@ -50,9 +53,16 @@ export const useFolder=(folderId=null,folder=null)=>{
     useEffect(()=>{
         
         const q=query(database.folders,where('parID','==',folderId),where('userId','==',curruser.uid),orderBy("createAtTime"))
-        const unsubscribe=onSnapshot(q,(snapshot)=>{dispatch({type:tp.child,payload:{childFolders:snapshot.docs.map(docs=>({key:docs.id,...docs.data()}))}})})
+        const unsubscribe=onSnapshot(q,(snapshot)=>{dispatch({type:tp.child_folder,payload:{childFolders:snapshot.docs.map(docs=>({key:docs.id,...docs.data()}))}})})
         return ()=>unsubscribe();
     },[folderId,curruser])
+    
+    useEffect(()=>{
+        const q=query(database.files,where("parID","==",folderId),where("userId","==",curruser.uid),orderBy("createdAtTime"))
+        const unsubscribe=onSnapshot(q,(snap)=>{dispatch({type:tp.child_file,payload:{childFiles:snap.docs.map(docs=>({key:docs.id,...docs.data()}))}})})
+        return ()=>unsubscribe();
+    },[folderId,curruser])
+
     
     return state;
 }

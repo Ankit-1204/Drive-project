@@ -15,7 +15,7 @@ const Front=()=>{
     }
     console.log(Id);
     
-    const {folderId,folder,childFolders}=useFolder(Id,null);
+    const {folderId,folder,childFolders,childFiles}=useFolder(Id,null);
     console.log(folder);
     console.log(childFolders);
     const [fileModal,setFileModal]=useState(false);
@@ -44,7 +44,7 @@ const Front=()=>{
     
         {folder && childFolders && <div className="flex w-full flex-col md:flex-row mx-auto px-9 py-8">
             {childFolders.map((folder)=>(<Link className=" bg-gray-600 p-3 m-2 rounded-md md:m-8" key={folder.key} to={'/folder/'+(folder.key)} >{folder.name}</Link>))}
-
+            {childFiles.map((file)=>(<Link className=" bg-gray-600 p-3 m-2 rounded-md md:m-8" key={file.key} to={'/folder/'+(file.key)} >{file.name}</Link>))}
         </div>}
     
     </div>
