@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContest";
-import { storage } from "../../firebase";
-import { ref ,uploadBytes,uploadBytesResumable} from "firebase/storage";
+import { database, storage } from "../../firebase";
+import { ref ,uploadBytes,uploadBytesResumable,getDownloadURL} from "firebase/storage";
+import { addDoc } from "firebase/firestore";
 
 
 const FileModal=(props)=>{
-
+    console.log(props.folderId)
     const {curruser}=useAuth();
     const [file,setFile]=useState(null);
 
@@ -13,7 +14,7 @@ const FileModal=(props)=>{
         setFile(e.target.files[0])
     }
     const createFile=()=>{
-        props.onClick();
+        props.click();
         let parentPath;
         if(props.folder.name!="root"){
             parentPath=props.folder.path.map((item)=>item.name).join('/');
@@ -23,8 +24,24 @@ const FileModal=(props)=>{
         }
         const filePath= props.folder.name==="root"?parentPath:parentPath+'/'+props.folder.name+'/'+file.name;
         const fileRef=ref(storage,"/files/"+filePath);
-        uploadBytesResumable(fileRef,file).then((snap)=>{console.log("file uploaded")}).catch((e)=>{console.log(e)});
-
+        const uploadTask=uploadBytesResumable(fileRef,file);
+        uploadTask.on('state_changed',
+            (snapshot)=>{
+                console.log(snapshot);
+            },
+            (e)=>{console.log(e)},
+            ()=>{
+                getDownloadURL(uploadTask.snapshot.ref).then(async(downloadURL)=>{
+                    const doc=await addDoc(database.files,{
+                        url:downloadURL,
+                        name:file.name,
+                        parID:props.folderId,
+                        createdAtTime:database.time,
+                        userId:curruser.uid
+                    })
+                })
+            }
+        )
         setFile(null);
     }
     return(
