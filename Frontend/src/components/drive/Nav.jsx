@@ -17,9 +17,9 @@ function Navlink(props){
     }
     return(
         <>
-            <Link to="/profile" className="flex items-center" ><FaUserCircle className="w-10 h-10 mr-2"/> Profile </Link>
+            <Link to="/profile" className="flex items-center p-3 hover:bg-slate-950 rounded-lg" ><FaUserCircle className="w-10 h-10 mr-2"/> Profile </Link>
             
-            <button onClick={handleLogOut} className="flex items-center"><IoLogOutOutline className="w-10 h-10 mr-2"/>Logout</button>
+            <button onClick={handleLogOut} className="flex items-center p-3 hover:bg-slate-950 rounded-lg"><IoLogOutOutline className="w-10 h-10 mr-2"/>Logout</button>
         </>
     )
 }
