@@ -8,7 +8,6 @@ import FolderPath from "./FolderPath.jsx";
 
 const Front=()=>{
     let {Id}=useParams();
-    console.log(Id);
     if(Id===undefined){
         Id=null;
     }
@@ -28,11 +27,11 @@ const Front=()=>{
     }
     return(
         
-    <div >
+    <div className="w-full">
      
     <div>
-       <div className="w-full mx-auto px-9 py-8 bg-gray-200">
-        <div className="flex flex-wrap justify-between">
+       <div className="w-full mx-auto px-9 py-1 bg-gray-200">
+        <div className="flex flex-wrap justify-between items-center w-full">
             {folder ? <FolderPath folder={folder} /> :<span className="text-2xl font-bold font-sans">Loading</span>}
             <div className=" w-1/6 flex flex-row justify-between md:pr-8">
                 <button onClick={handleFileIconClick} className=" hover:text-green-500 rounded"><File /></button>
@@ -41,7 +40,7 @@ const Front=()=>{
         </div>
     </div>
     
-        {folder && childFolders && <div className="flex w-full flex-col md:flex-row mx-auto px-9 py-8">
+        {folder && childFolders && <div className="flex w-full flex-col md:flex-row mx-auto px-9 py-4">
             {childFolders.map((folder)=>(<Link className=" bg-gray-600 p-3 m-2 rounded-md md:m-8" key={folder.key} to={'/folder/'+(folder.key)} >{folder.name}</Link>))}
             {childFiles.map((file)=>(<Link className=" bg-gray-600 p-3 m-2 rounded-md md:m-8" key={file.key} >{file.name}</Link>))}
         </div>}
@@ -50,7 +49,7 @@ const Front=()=>{
      
         {folderModal && folder && <FolderModal folderId={folderId} click={handleFolderIconClick} folder={folder} />}
         {fileModal && folder && <FileModal folderId={folderId} click={handleFileIconClick} folder={folder} />}
-    
+        
     </div>
     )
     

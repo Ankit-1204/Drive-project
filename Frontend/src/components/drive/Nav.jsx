@@ -18,7 +18,7 @@ function Navlink(props){
     return(
         <>
             <Link to="/profile" className="flex items-center" ><FaUserCircle className="w-10 h-10 mr-2"/> Profile </Link>
-            {/* <Link to="/about" > About </Link> */}
+            
             <button onClick={handleLogOut} className="flex items-center"><IoLogOutOutline className="w-10 h-10 mr-2"/>Logout</button>
         </>
     )
@@ -35,8 +35,8 @@ function Nav(){
             </div>
             
             
-            <div className="md:hidden">
-                <button onClick={()=>{isOpen(!open)}}> {open ?<IoMdArrowDropdownCircle className="w-10 h-10"/> : <IoCloseSharp className="w-10 h-10"/> } </button>
+            <div className="md:hidden flex items-center">
+                <button onClick={()=>{isOpen(!open)}}> {open ?<IoMdArrowDropdownCircle className="w-10 h-10"/> :<IoCloseSharp className="w-10 h-10"/> } </button>
             </div> 
         </nav>
         {!open && <div className="flex flex-col items-center basis-full md:hidden text-white text-xl my-4"><Navlink margin="mb-2"/></div>}

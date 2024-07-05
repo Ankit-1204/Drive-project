@@ -89,7 +89,7 @@ const FileModal=(props)=>{
                     
                 </div>
             </div>
-            {createPortal(<div><progress  value={progress}/></div>,document.body)}
+            
         </div>
     )
 }
