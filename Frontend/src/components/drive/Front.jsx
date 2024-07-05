@@ -9,7 +9,6 @@ import FolderPath from "./FolderPath.jsx";
 const Front=()=>{
     let {Id}=useParams();
     console.log(Id);
-    console.log(Id);
     if(Id===undefined){
         Id=null;
     }
@@ -44,7 +43,7 @@ const Front=()=>{
     
         {folder && childFolders && <div className="flex w-full flex-col md:flex-row mx-auto px-9 py-8">
             {childFolders.map((folder)=>(<Link className=" bg-gray-600 p-3 m-2 rounded-md md:m-8" key={folder.key} to={'/folder/'+(folder.key)} >{folder.name}</Link>))}
-            {childFiles.map((file)=>(<Link className=" bg-gray-600 p-3 m-2 rounded-md md:m-8" key={file.key} to={'/folder/'+(file.key)} >{file.name}</Link>))}
+            {childFiles.map((file)=>(<Link className=" bg-gray-600 p-3 m-2 rounded-md md:m-8" key={file.key} >{file.name}</Link>))}
         </div>}
     
     </div>
