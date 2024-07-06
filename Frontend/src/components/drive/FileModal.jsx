@@ -12,10 +12,10 @@ const FileModal=(props)=>{
     const [progress,setProgress]=useState(0);
     const handleInputChange=(e)=>{
         setFile(e.target.files[0])
+        console.log(e.target.files[0].type);
     }
     const createFile=()=>{
         props.click();
-
         let parentPath;
         if(props.folder.name!="root"){
             parentPath=props.folder.path.map((item)=>item.name).join('/');
@@ -61,7 +61,8 @@ const FileModal=(props)=>{
                                 parID:props.folderId,
                                 createdAtTime:database.time,
                                 userId:curruser.uid,
-                                path:filePath
+                                path:filePath,
+                                type:file.type
                         })  
                         }
                         
@@ -80,10 +81,10 @@ const FileModal=(props)=>{
                 <div className="flex flex-col w-full space-y-8">
                     <div className=" space-y-3">
                         <label className=" text-sm font-medium"> File Name</label>
-                        <input type="file"  onChange={handleInputChange} className=" rounded-md w-full p-3 ring-blue-300 ring-2" placeholder="Write your File Name..."/>
+                        <input type="file"  onChange={handleInputChange} className=" rounded-md w-full p-3 ring-green-300 ring-2" placeholder="Write your File Name..."/>
                     </div>
                     <div className="flex justify-around">
-                        <button type="submit" onClick={createFile} className=" rounded-sm text-white bg-blue-500 py-2.5 px-5 text-center">Create</button>
+                        <button type="submit" onClick={createFile} className=" rounded-sm text-white bg-blue-500 py-2.5 px-5 text-center">Add</button>
                         <button onClick={props.click} className=" rounded-sm text-white bg-blue-500 py-2.5 px-5 text-center">Close</button>
                     </div>
                     

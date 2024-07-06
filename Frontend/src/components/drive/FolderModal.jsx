@@ -34,7 +34,7 @@ const FolderModal=(props)=>{
             <div  className="flex bg-gray-100 w-full max-w-lg mx-4 p-10 md:mx-auto md:w-3/5 md:auto justify-center rounded-md">
                 <div className="flex flex-col w-full space-y-8">
                     <div className=" space-y-3">
-                        <label className=" text-sm font-medium"> File Name</label>
+                        <label className=" text-sm font-medium"> Folder Name</label>
                         <input type="text"  value={fileName} onChange={handleInputChange} className=" rounded-md w-full p-3 ring-blue-300 ring-2" placeholder="Write your File Name..."/>
                     </div>
                     <div className="flex justify-around">
