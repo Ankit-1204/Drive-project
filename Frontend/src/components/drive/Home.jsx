@@ -4,7 +4,7 @@ import Front from "./Front";
 function Home(){
     return(
        
-        <div>
+        <div className=" w-full h-full">
            <Header />
            <Front />
         </div>

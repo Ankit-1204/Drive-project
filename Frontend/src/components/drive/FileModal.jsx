@@ -21,7 +21,7 @@ const FileModal=(props)=>{
             parentPath=props.folder.path.map((item)=>item.name).join('/');
             console.log(parentPath);
         }else{
-            parentPath=file.name;
+            parentPath='/'+file.name;
         }
         const filePath= props.folder.name==="root"?parentPath:parentPath+'/'+props.folder.name+'/'+file.name;
         const fileRef=ref(storage,"/files/"+filePath);

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContest";
 import { Link } from "react-router-dom";
-import logo from "../../assets/Designer.webp"
+import logo from "../../assets/Designer.png"
 
 const Login= ()=>{
     const [email,setEmail]=useState("");
@@ -21,7 +21,7 @@ const Login= ()=>{
             <div className="flex fixed inset-0 justify-around items-center  bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#f97858_100%)] flex-col md:flex-row  px-10">
             <div className=" max-w-lg w-2/5 md:w-3/5 mx-5">
                 
-                    <img className="ring-4 rounded-xl ring-opacity-50 ring-orange-500 " src={logo} alt="Logo"/>
+                    <img className="" src={logo} alt="Logo"/>
                 
             </div>
             <div className="flex flex-col bg-white max-w-lg w-full md:w-3/5  p-4 rounded-xl ring-4 ring-opacity-50 ring-orange-500 mx-5">
