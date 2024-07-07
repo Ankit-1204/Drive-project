@@ -3,12 +3,13 @@ import { database } from "../../firebase.jsx";
 import { getDocs, query,where,getDoc,doc,orderBy } from "firebase/firestore";
 import { useAuth } from "../../context/AuthContest";
 import { onSnapshot } from "firebase/firestore";
-
+import { documentId } from "firebase/firestore";
 export const useFolder=(folderId=null,folder=null)=>{
     const tp={
         update:"UPDATE",
         select:"SELECT",
-        child:"CREATE_CHILD"
+        child_folder:"CREATE_CHILD_FOLDER",
+        child_file:"CREATE_CHILD_FILE"
     }
 
     const {curruser}=useAuth();
@@ -18,8 +19,10 @@ export const useFolder=(folderId=null,folder=null)=>{
                 return {...state,folder:payload.folder, folderId:payload.folderId};
             case tp.update:
                 return {...state,folder:payload.folder};
-            case tp.child:
+            case tp.child_folder:
                 return {...state,childFolders:payload.childFolders}
+            case tp.child_file:
+                return {...state,childFiles:payload.childFiles}
             default:
                 console.log("Invalid option");
                 return state;
@@ -36,23 +39,30 @@ export const useFolder=(folderId=null,folder=null)=>{
         dispatch({type:tp.select,payload:{folderId:folderId,folder:folder}})
     },[folderId,folder])
     useEffect(()=>{
-        if(folderId==null){
+        if(folderId===null){
             dispatch({type:tp.update,payload:{folder:ROOT}})
-        }else{
-            const fetchFolder=async()=>{
-                const q=query(database.folders,where('id','==',folderId),where('userId','==',curruser.uid))
-                const qsnap=await getDoc(q);  
-            }
-            return fetchFolder()
+        }
+        else{
+            
+            const q=doc(database.folders,folderId);
+            const unsubscribe= onSnapshot(q,(snapshot)=>{dispatch({type:tp.update,payload:{folder:snapshot.data()}})}) 
+            return ()=>unsubscribe();
         }  
     },[folderId])
 
     useEffect(()=>{
         
         const q=query(database.folders,where('parID','==',folderId),where('userId','==',curruser.uid),orderBy("createAtTime"))
-        const unsubscribe=onSnapshot(q,(snapshot)=>{dispatch({type:tp.child,payload:{childFolders:snapshot.docs.map(docs=>({key:docs.id,...docs.data()}))}})})
+        const unsubscribe=onSnapshot(q,(snapshot)=>{dispatch({type:tp.child_folder,payload:{childFolders:snapshot.docs.map(docs=>({key:docs.id,...docs.data()}))}})})
         return ()=>unsubscribe();
     },[folderId,curruser])
+    
+    useEffect(()=>{
+        const q=query(database.files,where("parID","==",folderId),where("userId","==",curruser.uid),orderBy("createdAtTime"))
+        const unsubscribe=onSnapshot(q,(snap)=>{dispatch({type:tp.child_file,payload:{childFiles:snap.docs.map(docs=>({key:docs.id,...docs.data()}))}})})
+        return ()=>unsubscribe();
+    },[folderId,curruser])
+
     
     return state;
 }
