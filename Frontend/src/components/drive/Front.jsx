@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { Folder, File } from "./Buttons";
 import FolderModal from "./FolderModal.jsx";
 import FileModal from "./FileModal.jsx";
@@ -13,13 +13,15 @@ import { AiFillDelete } from "react-icons/ai";
 import FolderPath from "./FolderPath.jsx";
 import Preview from "./Preview.jsx";
 import { deleteDoc, doc } from "firebase/firestore";
+import { useFriends } from "../Hooks/useFriends.jsx";
 
 const Front=()=>{
     let {Id}=useParams();
     if(Id===undefined){
         Id=null;
     }
-    
+    const request=useFriends();
+    console.log(request);
     const {folderId,folder,childFolders,childFiles}=useFolder(Id,null);
     console.log(folder);
     const [preview,setPreview]=useState(false);
