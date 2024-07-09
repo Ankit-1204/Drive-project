@@ -10,8 +10,10 @@ import { Link, useParams } from "react-router-dom";
 import { FaFile } from "react-icons/fa";
 import { IoFolderOpen } from "react-icons/io5";
 import { AiFillDelete } from "react-icons/ai";
+import { FaUserFriends } from "react-icons/fa";
 import FolderPath from "./FolderPath.jsx";
 import Preview from "./Preview.jsx";
+import { Friend } from "./Friend.jsx";
 import { deleteDoc, doc } from "firebase/firestore";
 import { useFriends } from "../Hooks/useFriends.jsx";
 
@@ -20,11 +22,12 @@ const Front=()=>{
     if(Id===undefined){
         Id=null;
     }
-    const request=useFriends();
+    const {request,friend}=useFriends();
     console.log(request);
     const {folderId,folder,childFolders,childFiles}=useFolder(Id,null);
     console.log(folder);
     const [preview,setPreview]=useState(false);
+    const [showFriend,setShowFriend]=useState(false);
     const [fileModal,setFileModal]=useState(false);
     const [folderModal,setFolderModal]=useState(false);
     const [selectedFile,setSelectedFile]=useState(null);
@@ -50,19 +53,7 @@ const Front=()=>{
             console.log("error is" ,e);
         }
     }
-    const downloadFile= (file)=>{
-        try {
-            const xhr = new XMLHttpRequest();
-            xhr.responseType = 'blob';
-            xhr.onload = (event) => {
-            const blob = xhr.response;
-            };
-            xhr.open('GET', file.url);
-            xhr.send();
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    
     const openFile=(file)=>{
         setSelectedFile(file);
         setPreview(true);
@@ -73,7 +64,9 @@ const Front=()=>{
         setSelectedFile(null);
         setPreview(false);
     }
-
+    const handleFriendIconClick=()=>{
+        setShowFriend(true);
+    }
     const handleFolderIconClick=()=>{
         setFolderModal(!folderModal);
     }
@@ -89,6 +82,7 @@ const Front=()=>{
         <div className="flex flex-wrap justify-between items-center w-full">
             {folder ? <FolderPath folder={folder} /> :<span className="text-2xl font-bold font-mono">Loading</span>}
             <div className=" w-1/6 flex flex-row justify-between md:pr-8">
+                <button onClick={handleFriendIconClick}>Friend</button>
                 <button onClick={handleFileIconClick} className=" hover:text-green-500 rounded"><File /></button>
                 <button onClick={handleFolderIconClick} className=" hover:text-blue-400 rounded"><Folder /></button>
             </div>
@@ -104,6 +98,7 @@ const Front=()=>{
         {folderModal && folder && <FolderModal folderId={folderId} click={handleFolderIconClick} folder={folder} />}
         {fileModal && folder && <FileModal folderId={folderId} click={handleFileIconClick} folder={folder} />}
         {selectedFile && <Preview closeFile={closeFile} file={selectedFile}/>}
+        {showFriend && <Friend friend={friend} request={request}/>}
     </div>
     )
     

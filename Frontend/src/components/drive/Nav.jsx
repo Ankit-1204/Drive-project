@@ -36,7 +36,7 @@ function Navlink(props){
                     
                     if (!snaps.data().requests.includes(curruser.uid)) {
                         await updateDoc(docRef, {
-                            requests: [...snaps.data().requests, curruser.uid]
+                            requests: [...snaps.data().requests,{id: curruser.uid,email:curruser.email}]
                         });
                         console.log("Request sent successfully!");
                     } else {
