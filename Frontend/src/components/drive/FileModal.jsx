@@ -24,7 +24,7 @@ const FileModal=(props)=>{
             parentPath='/'+file.name;
         }
         const filePath= props.folder.name==="root"?parentPath:parentPath+'/'+props.folder.name+'/'+file.name;
-        const fileRef=ref(storage,"/files/"+filePath);
+        const fileRef=ref(storage,"/files/"+curruser.uid+filePath);
         const uploadTask=uploadBytesResumable(fileRef,file);
         uploadTask.on('state_changed',
             (snapshot)=>{
