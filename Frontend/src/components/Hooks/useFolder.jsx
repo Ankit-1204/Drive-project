@@ -9,7 +9,8 @@ export const useFolder=(folderId=null,folder=null)=>{
         update:"UPDATE",
         select:"SELECT",
         child_folder:"CREATE_CHILD_FOLDER",
-        child_file:"CREATE_CHILD_FILE"
+        child_file:"CREATE_CHILD_FILE",
+        shared_files:"CREATE_SHARED_FILES"
     }
 
     const {curruser}=useAuth();
@@ -33,7 +34,8 @@ export const useFolder=(folderId=null,folder=null)=>{
                 folderId,
                 folder,
                 childFolders:[],
-                childFiles:[]
+                childFiles:[],
+                sharedFiles:[]
             })
     useEffect(()=>{
         dispatch({type:tp.select,payload:{folderId:folderId,folder:folder}})
@@ -63,6 +65,10 @@ export const useFolder=(folderId=null,folder=null)=>{
         return ()=>unsubscribe();
     },[folderId,curruser])
 
-    
+    useEffect(()=>{
+        const q=query(database.files,where("sharedUsers","array-contains",curruser.uid),orderBy("createdAtTime"));
+        const unsubscribe=onSnapshot(q,(snap)=>{dispatch({type:tp.shared_files,payload:{sharedFiles:snap.docs.map(docs=>({key:docs.id,...docs.data()}))}})})
+        return ()=>unsubscribe();
+    },[curruser])
     return state;
 }

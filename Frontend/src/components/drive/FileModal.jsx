@@ -62,7 +62,8 @@ const FileModal=(props)=>{
                                 createdAtTime:database.time,
                                 userId:curruser.uid,
                                 path:filePath,
-                                type:file.type
+                                type:file.type,
+                                sharedUsers:[]
                         })  
                         }
                         
