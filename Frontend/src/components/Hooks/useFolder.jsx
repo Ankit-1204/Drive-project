@@ -24,6 +24,8 @@ export const useFolder=(folderId=null,folder=null)=>{
                 return {...state,childFolders:payload.childFolders}
             case tp.child_file:
                 return {...state,childFiles:payload.childFiles}
+            case tp.shared_files:
+                return {...state,sharedFiles:payload.sharedFiles}
             default:
                 console.log("Invalid option");
                 return state;

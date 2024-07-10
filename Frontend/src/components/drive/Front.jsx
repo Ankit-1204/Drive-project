@@ -25,15 +25,16 @@ const Front=()=>{
     }
     const {friend,request}=useFriends();
     console.log(request);
-    const {folderId,folder,childFolders,childFiles}=useFolder(Id,null);
+    const {folderId,folder,childFolders,childFiles,sharedFiles}=useFolder(Id,null);
     console.log(folder);
+    console.log(sharedFiles);
     const [preview,setPreview]=useState(false);
     const [fileModal,setFileModal]=useState(false);
     const [folderModal,setFolderModal]=useState(false);
     const [selectedFile,setSelectedFile]=useState(null);
     const [shareEmail, setShareEmail] = useState("");
     const [sharingFile, setSharingFile] = useState(null);
-
+    const [sharedFilesDropdown, setSharedFilesDropdown] = useState(false);
 
     const deleteFile= async(file)=>{
         try {
@@ -76,14 +77,15 @@ const Front=()=>{
     };
     const handleShare = async () => {
         const friendDoc = friend.find(f => f.email === shareEmail);
+        const friendId=friendDoc.id;
         if (friendDoc) {
             const fileDocRef = doc(database.files, sharingFile.key);
             const fileDoc = await getDoc(fileDocRef);
             if (fileDoc.exists()) {
                 const sharedUsers = fileDoc.data().sharedUsers || [];
-                if (!sharedUsers.some(user => user.id === friendDoc.id)) {
+                if (!sharedUsers.some(user => user === friendId)) {
                     await updateDoc(fileDocRef, {
-                        sharedUsers: [...sharedUsers, { id: friendDoc.id, email: friendDoc.email }]
+                        sharedUsers: [...sharedUsers, friendId]
                     });
                     console.log("File shared successfully!");
                 } else {
@@ -96,7 +98,9 @@ const Front=()=>{
         setShareEmail("");
         setSharingFile(null);
     };
-
+    const toggleSharedFilesDropdown = () => {
+        setSharedFilesDropdown(!sharedFilesDropdown);
+      };
     return(   
     <div className="w-full h-full bg-gradient-to-b from-gray-900 to-gray-600">
      
@@ -135,6 +139,25 @@ const Front=()=>{
                     </div>
                 </div>
             )}
+        <button onClick={toggleSharedFilesDropdown} className="fixed bottom-4 right-4 px-4 py-2 bg-blue-500 text-white rounded-full">
+            Shared Files
+        </button>
+        {sharedFilesDropdown && (
+        <div className="fixed bottom-16 right-4 bg-white shadow-lg rounded-lg p-4">
+          <h3 className="text-lg font-medium">Shared Files</h3>
+          {sharedFiles.length > 0 ? (
+            sharedFiles.map((file) => (
+              <div key={file.key} className="flex flex-row items-center">
+                <button onClick={() => openFile(file)} className="text-blue-600 hover:underline">
+                  {file.name}
+                </button>
+              </div>
+            ))
+          ) : (
+            <p>No shared files found.</p>
+          )}
+        </div>
+      )}
         {folderModal && folder && <FolderModal folderId={folderId} click={handleFolderIconClick} folder={folder} />}
         {fileModal && folder && <FileModal folderId={folderId} click={handleFileIconClick} folder={folder} />}
         {selectedFile && <Preview closeFile={closeFile} file={selectedFile}/>}
