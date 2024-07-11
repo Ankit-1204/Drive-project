@@ -82,7 +82,7 @@ function Navlink(props){
     return(
         <>    
             <div>
-                <button className="flex items-center p-3 hover:bg-slate-950 rounded-lg" onClick={()=>setDisplayFriend(!displayFriend)}> <FaUserFriends className="w-10 h-10 mr-2" /> Friends </button>
+                <button className="flex items-center p-2 hover:bg-slate-950 rounded-lg" onClick={()=>setDisplayFriend(!displayFriend)}> <FaUserFriends className="w-10 h-10 mr-2" /> Friends </button>
 
                 {displayFriend && <div className=" bg-slate-700 p-2 rounded-lg overflow-hidden transition-all duration-300 ease-in-out absolute space-y-2">
                     <div className=" my-2">
@@ -99,7 +99,7 @@ function Navlink(props){
                     </div>
                 </div>}
             </div>          
-            <button onClick={handleLogOut} className="flex items-center p-3 hover:bg-slate-950 rounded-lg"><IoLogOutOutline className="w-10 h-10 mr-2"/>Logout</button>
+            <button onClick={handleLogOut} className="flex items-center p-2 hover:bg-slate-950 rounded-lg"><IoLogOutOutline className="w-10 h-10 mr-2"/>Logout</button>
         </>
     )
 }
@@ -121,7 +121,7 @@ function Nav(){
                 <button onClick={()=>{isOpen(!open)}}> {open ?<IoMdArrowDropdownCircle className="w-10 h-10"/> :<IoCloseSharp className="w-10 h-10"/> } </button>
             </div> 
         </nav>
-        {!open && <div className="flex flex-col items-center basis-full md:hidden text-white text-xl my-4"><Navlink margin="mb-2"/></div>}
+        {!open && <div className="flex flex-col items-center basis-full md:hidden text-white text-xl"><Navlink margin="mb-2"/></div>}
         </>
     )
 }
