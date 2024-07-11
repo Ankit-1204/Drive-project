@@ -9,7 +9,6 @@ const FileModal=(props)=>{
     console.log(props.folderId)
     const {curruser}=useAuth();
     const [file,setFile]=useState(null);
-    const [progress,setProgress]=useState(0);
     const handleInputChange=(e)=>{
         setFile(e.target.files[0])
         console.log(e.target.files[0].type);
@@ -26,11 +25,11 @@ const FileModal=(props)=>{
         const filePath= props.folder.name==="root"?parentPath:parentPath+'/'+props.folder.name+'/'+file.name;
         const fileRef=ref(storage,"/files/"+curruser.uid+filePath);
         const uploadTask=uploadBytesResumable(fileRef,file);
+        props.setShowProg(true);
         uploadTask.on('state_changed',
             (snapshot)=>{
                 const prog=(snapshot.bytesTransferred/snapshot.totalBytes)*100;
-                setProgress(prog);
-                console.log('Upload is ' + progress + '% done');
+                props.setProgVal(prog);
                 console.log(snapshot);
                 
             },
@@ -71,7 +70,7 @@ const FileModal=(props)=>{
                         
                     })
                     
-                
+                props.setShowProg(false);
             }
         )
         setFile(null);

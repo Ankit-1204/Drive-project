@@ -13,7 +13,7 @@ import { AiFillDelete } from "react-icons/ai";
 import { PiShareFatFill } from "react-icons/pi";
 import FolderPath from "./FolderPath.jsx";
 import Preview from "./Preview.jsx";
-import { deleteDoc, doc, getDoc, updateDoc } from "firebase/firestore";
+import { deleteDoc, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { useFriends } from "../Hooks/useFriends.jsx";
 import { useAuth } from "../../context/AuthContest.jsx";
 const Front=()=>{
@@ -32,9 +32,10 @@ const Front=()=>{
     const [fileModal,setFileModal]=useState(false);
     const [folderModal,setFolderModal]=useState(false);
     const [selectedFile,setSelectedFile]=useState(null);
-    const [shareEmail, setShareEmail] = useState("");
     const [sharingFile, setSharingFile] = useState(null);
     const [sharedFilesDropdown, setSharedFilesDropdown] = useState(false);
+    const [showProg,setShowProg]=useState(false);
+    const [progVal,setProgVal]=useState(0);
 
     const deleteFile= async(file)=>{
         try {
@@ -49,9 +50,25 @@ const Front=()=>{
         
     }
 
-    const deleteFolder= async(folder)=>{
+    const deleteFolder= async(folderid)=>{
         try{
-            const folderDoc=doc(database.folders,folder.key);
+            const folderDoc=doc(database.folders,folderid);
+            const filesQuery=query(database.files,where("parID","==",folderid),where("userId","==",curruser.uid));
+            const fileDocs=await getDocs(filesQuery);
+            const deletePromises = [];
+            for (const fileDoc of fileDocs.docs) {
+                const fileRef = ref(storage, 'files/' + curruser.uid + fileDoc.data().path);
+                deletePromises.push(deleteDoc(fileDoc.ref));
+                deletePromises.push(deleteObject(fileRef));
+              }
+            await Promise.all(deletePromises);
+
+            const subfoldersQuery = query(database.folders, where("parID", "==", folderid),where("userId","==",curruser.uid));
+            const subfolderDocs = await getDocs(subfoldersQuery);
+
+            for (const subfolderDoc of subfolderDocs.docs) {
+                await deleteFolder(subfolderDoc.id);
+            }
             await deleteDoc(folderDoc);
         }catch(e){
             console.log("error is" ,e);
@@ -75,7 +92,7 @@ const Front=()=>{
     const handleShareIconClick = (file) => {
         setSharingFile(file);
     };
-    const handleShare = async () => {
+    const handleShare = async (shareEmail) => {
         const friendDoc = friend.find(f => f.email === shareEmail);
         const friendId=friendDoc.id;
         if (friendDoc) {
@@ -95,14 +112,14 @@ const Front=()=>{
         } else {
             console.log("Email not found in friend list.");
         }
-        setShareEmail("");
+        
         setSharingFile(null);
     };
     const toggleSharedFilesDropdown = () => {
         setSharedFilesDropdown(!sharedFilesDropdown);
       };
     return(   
-    <div className="w-full h-full bg-gradient-to-b from-gray-900 to-gray-600">
+    <div className="w-full h-full bg-gradient-to-b from-gray-300 to-gray-500">
      
     
        <div className="w-full mx-auto px-9 py-1 bg-gray-300">
@@ -117,24 +134,18 @@ const Front=()=>{
     </div>
     
         {folder && childFolders && <div className="grid grid-cols-1 md:grid-cols-3 py-5 px-5 gap-y-6 ">
-            {childFolders.map((folder)=>(<div className="flex flex-row items-center" key={folder.key}><Link key={folder.key} to={'/folder/'+(folder.key)} ><button className=" px-6 py-3.5 text-base font-medium text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"><IoFolderOpen className=" mr-3 w-5 h-5 md:w-9 md:h-9" /> {folder.name}</button></Link> <button onClick={()=>{deleteFolder(folder)}}><AiFillDelete className=" text-red-700 ml-2 w-5 h-5 hover:w-7 hover:h-7"/></button> </div>))}
-            {childFiles.map((file)=>(<div className="flex flex-row items-center" key={file.key}><button onClick={()=>openFile(file)} className=" px-6 py-3.5 text-base font-medium text-white inline-flex items-center bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 rounded-lg text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"><FaFile className=" mr-3 w-5 h-5 md:w-9 md:h-9" /> {file.name}</button> <button onClick={()=>{deleteFile(file)}}><AiFillDelete className=" text-red-700 ml-2 w-5 h-5 hover:w-7 hover:h-7"/></button><button onClick={() => { handleShareIconClick(file) }}> <PiShareFatFill className=" text-blue-700 my-2 ml-2 w-5 h-5 hover:w-7 hover:h-7" /></button></div>))}
+            {childFolders.map((folder)=>(<div className="flex flex-row items-center " key={folder.id}><Link key={folder.id} to={'/folder/'+(folder.id)} ><button className=" px-6 py-3.5 text-base font-medium text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"><IoFolderOpen className=" mr-3 w-5 h-5 md:w-9 md:h-9" /> {folder.name}</button></Link> <button onClick={()=>{deleteFolder(folder.id)}}><AiFillDelete className=" text-red-700 ml-2 w-5 h-5 hover:w-7 hover:h-7"/></button> </div>))}
+            {childFiles.map((file)=>(<div className="flex flex-row items-center " key={file.key}><button onClick={()=>openFile(file)} className=" px-6 py-3.5 text-base font-medium text-white inline-flex items-center bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 rounded-lg text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"><FaFile className=" mr-3 w-5 h-5 md:w-9 md:h-9" /> {file.name}</button> <button onClick={()=>{deleteFile(file)}}><AiFillDelete className=" text-red-700 ml-2 w-5 h-5 hover:w-7 hover:h-7"/></button><button onClick={() => { handleShareIconClick(file) }}> <PiShareFatFill className=" text-blue-700 my-2 ml-2 w-5 h-5 hover:w-7 hover:h-7" /></button></div>))}
 
         </div>}
         {sharingFile && (
                 <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">
-                    <div className="bg-white p-6 rounded-lg shadow-lg">
+                    <div className="bg-white p-6 rounded-lg shadow-lg ">
                         <h3 className="text-lg font-medium">Share {sharingFile.name}</h3>
-                        <input
-                            type="email"
-                            value={shareEmail}
-                            onChange={(e) => setShareEmail(e.target.value)}
-                            placeholder="Enter friend's email"
-                            className="mt-2 p-2 border border-gray-300 rounded"
-                        />
-                        <div className="flex mt-4 justify-end">
+                        {console.log(friend)}
+                        {friend.map((f)=><div className=" py-2 text-blue-500" key={f.id}><button onClick={()=>handleShare(f.email)}>{f.email}</button></div>)}
+                        <div className="flex mt-4 justify-center">
                             <button onClick={() => setSharingFile(null)} className="mr-2 px-4 py-2 bg-gray-500 text-white rounded">Cancel</button>
-                            <button onClick={handleShare} className="px-4 py-2 bg-blue-500 text-white rounded">Share</button>
                         </div>
                     </div>
                 </div>
@@ -159,9 +170,12 @@ const Front=()=>{
         </div>
       )}
         {folderModal && folder && <FolderModal folderId={folderId} click={handleFolderIconClick} folder={folder} />}
-        {fileModal && folder && <FileModal folderId={folderId} click={handleFileIconClick} folder={folder} />}
+        {fileModal && folder && <FileModal folderId={folderId} click={handleFileIconClick} folder={folder} setProgVal={setProgVal} setShowProg={setShowProg}/>}
         {selectedFile && <Preview closeFile={closeFile} file={selectedFile}/>}
-        
+        {showProg && <div className="fixed bottom-4 left-2 rounded-lg bg-white p-4 flex flex-row items-center space-x-2">
+            <label >Uploading</label>
+                <progress value={progVal} max={100} className=" text-blue-600" />
+                    </div>}
     </div>
     )
     

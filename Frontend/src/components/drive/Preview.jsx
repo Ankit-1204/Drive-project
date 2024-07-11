@@ -22,7 +22,7 @@ const Preview=(props)=>{
     return(
         <div className="flex fixed inset-0 z-50 items-center justify-center ">
             <div className=" flex w-full h-full min-h-screen flex-col p-4 justify-center">
-            <div className="flex justify-around items-center flex-row"><h2>{props.file.name}</h2> <button onClick={()=>downloadFile(props.file)}>Download</button></div>
+            <div className="flex justify-around items-center flex-row "><h2 className="px-4 py-2 bg-blue-500 text-white rounded-md m-2">{props.file.name}</h2></div>
             
             {props.file.type === "application/pdf" && (<div className="flex flex-grow justify-center">
                 <embed src={props.file.url} width="80%" height="100%" type="application/pdf" />
@@ -40,7 +40,7 @@ const Preview=(props)=>{
             <iframe src={props.file.url} title={props.file.name} width="500" height="375" className="max-w-full h-auto"></iframe></div>
           )}
 
-            <div className="flex justify-center"><button onClick={props.closeFile} className="close-button">Close</button></div>
+            <div className="flex justify-center "><button onClick={props.closeFile} className="close-button px-4 py-2 bg-blue-500 text-white rounded-md m-2">Close</button><button className="px-4 py-2 bg-blue-500 text-white rounded-md m-2" onClick={()=>downloadFile(props.file)}>Download</button></div>
             
             </div>
         </div>
