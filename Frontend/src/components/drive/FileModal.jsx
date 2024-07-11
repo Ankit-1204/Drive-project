@@ -21,10 +21,10 @@ const FileModal=(props)=>{
             parentPath=props.folder.path.map((item)=>item.name).join('/');
             console.log(parentPath);
         }else{
-            parentPath=file.name;
+            parentPath='/'+file.name;
         }
         const filePath= props.folder.name==="root"?parentPath:parentPath+'/'+props.folder.name+'/'+file.name;
-        const fileRef=ref(storage,"/files/"+filePath);
+        const fileRef=ref(storage,"/files/"+curruser.uid+filePath);
         const uploadTask=uploadBytesResumable(fileRef,file);
         uploadTask.on('state_changed',
             (snapshot)=>{
@@ -62,7 +62,8 @@ const FileModal=(props)=>{
                                 createdAtTime:database.time,
                                 userId:curruser.uid,
                                 path:filePath,
-                                type:file.type
+                                type:file.type,
+                                sharedUsers:[]
                         })  
                         }
                         

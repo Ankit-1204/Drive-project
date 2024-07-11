@@ -17,7 +17,8 @@ const firestore= getFirestore(app);
 export const database= {
     folders: collection(firestore,'folder'),
     files: collection(firestore,'files'),
-    time:serverTimestamp()
+    time:serverTimestamp(),
+    user:collection(firestore,"user")
 }
 export const storage=getStorage(app);
 export const auth=getAuth(app);

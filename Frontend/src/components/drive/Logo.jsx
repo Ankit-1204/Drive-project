@@ -1,4 +1,4 @@
-import logo from "../../assets/Designer.webp"
+import logo from "../../assets/Designer.png"
 import { Link } from "react-router-dom";
 function Logo(){
     return(
