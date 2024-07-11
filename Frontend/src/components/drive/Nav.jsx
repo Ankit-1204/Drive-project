@@ -93,9 +93,10 @@ function Navlink(props){
                     <span>Friend List</span>
                     {friend.map((f)=>(<div className=" bg-slate-800 rounded-md flex p-4 flex-col" key={f.id}>{f.email} </div> ))}
                     </div>
-                    <div>
+                    <div className=" justify-center flex flex-col">
                     <span>Request List</span>
-                    {request.map((req)=>(<div key={req.id} className=" bg-slate-800 rounded-md flex p-4 flex-col"> {req.email} <button onClick={()=>handleRequestAccept(req)}>Accept</button></div>))}
+                    {request.map((req)=>(<div key={req.id} className=" bg-slate-800 rounded-md flex p-3 flex-col"> {req.email} <button className=" bg-slate-600 p-1 rounded-lg mt-1" onClick={()=>handleRequestAccept(req)}>Accept</button></div>))}
+                    
                     </div>
                 </div>}
             </div>          

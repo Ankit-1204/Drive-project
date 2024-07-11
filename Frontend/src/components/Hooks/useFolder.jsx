@@ -57,7 +57,7 @@ export const useFolder=(folderId=null,folder=null)=>{
     useEffect(()=>{
         
         const q=query(database.folders,where('parID','==',folderId),where('userId','==',curruser.uid),orderBy("createAtTime"))
-        const unsubscribe=onSnapshot(q,(snapshot)=>{dispatch({type:tp.child_folder,payload:{childFolders:snapshot.docs.map(docs=>({key:docs.id,...docs.data()}))}})})
+        const unsubscribe=onSnapshot(q,(snapshot)=>{dispatch({type:tp.child_folder,payload:{childFolders:snapshot.docs.map(docs=>({id:docs.id,...docs.data()}))}})})
         return ()=>unsubscribe();
     },[folderId,curruser])
     

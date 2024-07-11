@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContest";
 import { Link } from "react-router-dom";
+import logo from "../../assets/Designer.png"
 
 const Signup= ()=>{
     const [email,setEmail]=useState("");
@@ -23,9 +24,8 @@ const Signup= ()=>{
     }
     return(
         
-            <div className="flex fixed inset-0 justify-center items-center bg-slate-200">
-            
-            <div className="flex flex-col bg-white max-w-lg w-full md:w-3/5 mx-4 p-4 md:mx-auto rounded-xl border-4 ring-gray-400">
+            <div className="flex fixed inset-0 justify-around items-center  bg-white [background:radial-gradient(125%_125%_at_50%_10%,gray,black)] flex-col md:flex-row  px-10">
+            <div className="flex flex-col bg-slate-300 max-w-lg w-full md:w-3/5  p-4 rounded-xl ring-4 ring-opacity-50 ring-blue-900 mx-5">
                 <form className="">
                 <label className=" flex flex-col items-center text-3xl font-serif font-semibold mb-2">SignUp</label>
                 <div className="mt-2 space-y-2">
@@ -48,7 +48,11 @@ const Signup= ()=>{
                 </div>
                 </form>
             </div>
+                <div className=" max-w-lg w-2/5 md:w-3/5 mx-5">
+                    
+                    <img className="" src={logo} alt="Logo"/>
             
+                </div>
             </div>
     )
 }
