@@ -6,7 +6,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { IoLogOutOutline } from "react-icons/io5";
 import { FaUserFriends } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContest";
-import { doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
+import { arrayUnion, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { database } from "../../firebase";
 import { useFriends } from "../Hooks/useFriends";
 function Navlink(props){

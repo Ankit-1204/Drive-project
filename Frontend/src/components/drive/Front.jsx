@@ -119,7 +119,7 @@ const Front=()=>{
         setSharedFilesDropdown(!sharedFilesDropdown);
       };
     return(   
-    <div className="w-full h-full bg-gradient-to-b from-gray-300 to-gray-500">
+    <div className="w-full h-full bg-gradient-to-b from-gray-300 to-gray-600">
      
     
        <div className="w-full mx-auto px-9 py-1 bg-gray-300">
